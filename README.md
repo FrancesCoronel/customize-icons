@@ -15,147 +15,126 @@
 
 ## intro
 
-OS X El Capitan introduced a new security policy preventing users from changing any system icon. You can still continue to change your apps and volumes icons normally.
+OS X El Capitan introduced a new security policy preventing users from changing any system icon.
+
+However, you can still continue to change your apps and volumes icons normally.
 
 Apps like `LiteIcon` still work pretty well for this sort of thing, but it requires a lot of manual dragging.
 
-If you're like me and enjoy using the terminal to automate work-flows, I think you'll enjoy what's to follow.
+If you're like me and enjoy using the `Terminal` to automate work-flows, I think you'll enjoy what's to follow.
 
 ## tools
 
 - `Terminal` or an alternative like `iTerm 2`
-- this `GitHub` repo located at <code><a href="https://github.com/fvcproductions/customize-icons">github.com/fvcproductions/customize-icons</a></code>
+- this `GitHub` repo located at `[github.com/fvcproductions/customize-icons](https://github.com/fvcproductions/customize-icons)`
 
 ## step 1
 
 ### Getting some cool icons.
 
-<a title="DeviantArt" href="http://www.deviantart.com" target="_blank">DeviantArt</a> is my go-to place for icons sets, but you can also try <a title="IconArchive" href="http://www.iconarchive.com/" target="_blank">IconArchive</a> for a broader range of options.
+[DeviantArt](http://www.deviantart.com) is my go-to place for icons sets, but you can also try [IconArchive](http://www.iconarchive.com/) for a broader range of options.
 
 ## step 2
 
-<h1>Step 2 - Get The Command</h1>
-I include this command file in the <a title="Icons" href="https://github.com/fvcproductions/customize-icons" target="_blank"><code>ZIP</code> file</a> mentioned in <strong>Step 1</strong>, but for reference, here is the code for the <code>ChangeIcons.command</code>.
+### edit files
 
-[code language="plain"]#!/usr/bin/env ruby
+I include this command file in the repo under `ChangeIcons.command`
 
-require 'json'
-require 'shellwords'
+Now here comes the tricky part.
 
-if ENV['USER'] != 'root'
-  puts "You'll be prompted once to enter you administrator password."
-end
+This command relies on a `JSON` file that is named `icon-data.json` and a `UNIX Executable File` called `setfileicon`.
 
-Dir.chdir(File.dirname(__FILE__)) do
+![All The Icons Folder Screenshot - 1](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-10-54.png)
 
-  file = File.read(%Q(.set_icons/icon_data.json))
-  icon_data = JSON.parse(file)
+![All The Icons Screenshot - 2](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-11-18.png)
 
-  icon_data.each do |key, value|
+These files are both included in a folder called `set_icon` in the [`ZIP` file](https://github.com/fvcproductions/customize-icons) provided in **Step 1**. The `icon-data.json` file looks something like this:
 
-    app_path = "/Applications/#{key}"
+```json
 
-    if Dir.exists?(app_path) and File.exists?("#{value}.icns")
-      puts "Changing icon for #{app_path}"
-      `sudo .set_icons/setfileicon "#{value}.icns" "#{app_path}"`
-    end
-
-  end
-
-  puts "Restarting Finder and the Dock"
-  # `killall Dock`
-  # `killall Finder`
-
-  puts %Q(Finished!)
-
-end
-[/code]
-
-Now here comes the tricky part. This command relies on a <code>JSON</code> file that is named <code>icon-data.json</code> and a <code>UNIX Executable File</code> called <code>setfileicon</code>.
-
-<a href="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-10-54.png"><img class="aligncenter" src="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-10-54.png" alt="All The Icons Folder Screenshot - 1" align="middle" /></a><a href="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-11-18.png"><img class="aligncenter" src="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-11-18.png" alt="All The Icons Screenshot - 2" align="middle" /></a>
-
-These files are both included in a folder called <code>set_icon</code> in the <a title="Icons" href="https://github.com/fvcproductions/customize-icons" target="_blank"><code>ZIP</code> file</a> provided in <strong>Step 1</strong>.
-
-The <code>icon-data.json</code> file looks something like this:
-
-[code language="plain"]{
+{
     "1Password 5.app":"1Password 5",
     "Alfred 2.app":"Alfred 2",
     "Amphetamine.app":"Amphetamine"
 }
-[/code]
 
-It is formatted with the name of the app first in quotes followed by a semi-colon and then the name of the <code>icns</code> file.
+```
 
-Edit this <code>icon-data.json</code> file to include your own apps or create it yourself using your favorite text-editor.
+It is formatted with the name of the app first in quotes followed by a semi-colon and then the name of the `icns` file.
 
-Here is how the <code>JSON</code> file for the Utilities looks like.
+Edit this `icon-data.json` file to include your own apps or create it yourself using your favorite text-editor.
 
-<a href="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-49-06.png"><img class="aligncenter" src="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-49-06.png" alt="JSON file" align="middle" /></a>
+Here is how the `JSON` file for the Utilities looks like.
 
-It is <code>case-sensitive</code>, so make sure to type everything correctly to suit what the app is called and what you named the corresponding <code>icns</code> file.
-<blockquote>When you are editing this file to add on your own apps, make sure there’s not a comma on the last line or there will be an error.</blockquote>
-Now, using <code>Terminal</code>, type in the following: <code>defaults write com.apple.finder AppleShowAllFiles YES</code>. Once you press <code>Enter</code>, this command will show all the hidden files on your Mac. Don’t mess with any of these hidden files. The reason Apple hides them is so that the user has less of a chance of messing things up.
-<blockquote>To make the files hidden again later, type in the same command but with a NO at the end like this: <code>defaults write com.apple.finder AppleShowAllFiles NO</code>.</blockquote>
-After that, type in <code>killall Finder</code> into Terminal for the command to restart the Finder and have the hidden files be revealed in your Finder.
+![JSON file](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-49-06.png)
 
-<a href="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-21-37.png"><img class="aligncenter" src="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-21-37.png" alt="Show Hidden Files Command in Terminal" align="middle" /></a>
+It is `case-sensitive`, so make sure to type everything correctly to suit what the app is called and what you named the corresponding `icns` file.
 
-Now that you have your Finder revealing all the hidden files - in the folder where you have all your icons properly named, copy and paste the folder <code>set_icons</code> from the <a title="Icons" href="https://github.com/fvcproductions/customize-icons" target="_blank"><code>ZIP</code> file</a> mentioned in <strong>Step 1</strong>, and rename it to <code>.set_icons</code>. Adding a period in front of the folder name makes it hidden and you will therefore not be able to see it anymore.
+> When you are editing this file to add on your own apps, make sure there’s not a comma on the last line or there will be an error.
 
-It looks exactly like the <code>.set_icons</code> folder already included within the folder called <code>Utilities</code> that can be found in the <a title="Icons" href="https://github.com/fvcproductions/customize-icons" target="_blank"><code>ZIP</code> file</a>.
+Now, using `Terminal`, type in the following: `defaults write com.apple.finder AppleShowAllFiles YES`.
 
-<a href="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-11-42.png"><img class="aligncenter" src="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-11-42.png" alt="Utility Sub-Folder" align="middle" /></a>
+Once you press `Enter`, this command will show all the hidden files on your Mac.
 
-So if you want to change your Utility icons as well, the <code>.set_icons</code> folder located in the sub-folder <code>Utilities</code> already has the <code>json</code> file with all the necessary modifications.
-<blockquote>The only difference between the <code>ChangeIcons.command</code> within the <code>All The Icons</code> folder and the <code>ChangeUtilityIcons.command located within the</code>Utilities folder<code>is that on Line 36, the app path is listed as</code>app_path = “/Applications/Utilities/#{key}”`.</blockquote>
-<em>A special thanks to <a title="James Moore" href="https://twitter.com/foozmeat" target="_blank">James Moore</a>, who created the <code>ChangeIcons.command</code> to replace all the icons and Damien Bobillot who created the <code>setfileicon</code> UNIX Executable File.</em>
-<h1>Step 3 - Execute Command</h1>
-<blockquote>otherwise known as <code>TLDR</code></blockquote>
+I would not recommend messing with any of these hidden files.
+
+The reason Apple hides them is so that the user has less of a chance of messing things up.
+
+> To make the files hidden again later, type in the same command but with a NO at the end like this: `defaults write com.apple.finder AppleShowAllFiles NO`.
+
+After that, type in `killall Finder` into Terminal for the command to restart the Finder and have the hidden files be revealed in your Finder.
+
+[![Show Hidden Files Command in Terminal](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-21-37.png)](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-21-37.png)
+
+Now that you have your Finder revealing all the hidden files - in the folder where you have all your icons properly named, copy and paste the folder `set_icons` from the [`ZIP` file](https://github.com/fvcproductions/customize-icons "Icons") mentioned in **Step 1**, and rename it to `.set_icons`.
+
+Adding a period in front of the folder name makes it hidden and you will therefore not be able to see it anymore.
+
+It looks exactly like the `.set_icons` folder already included within the folder called `Utilities` that can be found in the [`ZIP` file](https://github.com/fvcproductions/customize-icons "Icons").
+
+![Utility Sub-Folder](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-28-23-11-42.png)
+
+So if you want to change your Utility icons as well, the `.set_icons` folder located in the sub-folder `Utilities` already has the `json` file with all the necessary modifications.
+
+> The only difference between the `ChangeIcons.command` within the `All The Icons` folder and the `ChangeUtilityIcons.command located within the`Utilities folder`is that on Line 36, the app path is listed as`app_path = “/Applications/Utilities/#{key}”`.
+
+## step 3
+
+### edit command
+
 Now you probably have something like the following:
-<ul>
-    <li>a folder called <code>All The Icons</code> with
-<ul>
-    <li>all the icons you want to replace your old ones (in <code>icns</code> format)</li>
-    <li>the <code>ChangeIcons.command</code> that was included in this <a title="Icons" href="https://github.com/fvcproductions/customize-icons" target="_blank"><code>ZIP</code> file</a></li>
-    <li>a <em>hidden</em> sub-folder called <code>.set_icons</code> with
-<ul>
-    <li>a modified <code>icon-data.json</code> file to include your own personal apps</li>
-    <li>the <code>setfileicon</code> UNIX executable file</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-At this point, if you’ve done everything right, you can “hide” your hidden files again in your Finder by executing the command <code>defaults write com.apple.finder AppleShowAllFiles NO</code> in <code>Terminal</code>. Make sure to execute <code>killall Finder</code> as well so that your Finder restarts and shows the changes.
 
-Now go ahead and click the <code>ChangeIcons.command</code> to change all your icons simultaneously.
+*   a folder called `All The Icons` with
+    *   all the icons you want to replace your old ones (in `icns` format)
+    *   the `ChangeIcons.command` that was included in this [`ZIP` file](https://github.com/fvcproductions/customize-icons "Icons")
+    *   a _hidden_ sub-folder called `.set_icons` with
+        *   a modified `icon-data.json` file to include your own personal apps
+        *   the `setfileicon` UNIX executable file
 
-<a href="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-01-44.png"><img class="aligncenter" src="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-01-44.png" alt="ChangeIcons.command in Terminal" align="middle" /></a>
+At this point, if you’ve done everything right, you can “hide” your hidden files again in your Finder by executing the command `defaults write com.apple.finder AppleShowAllFiles NO` in `Terminal`.
 
-You will be prompted to enter your password and <em>walla</em> you have all your snazzy new icons in place in seconds!
-<blockquote>If you want to change your Utility icons as well, go ahead and click <code>ChangeUtilityIcons.command</code> too within the sub-folder called <code>Utilities</code>, assuming you properly named all the icons so that it works with the <code>json</code> file that is shown in <strong>Step 2</strong>.</blockquote>
-<h3><strong>Possible Errors You May Encounter</strong></h3>
-<ul>
-    <li>You tried to edit the command files and now have a syntax error, like in the form of quotes - just make sure to use <em>straight quotes</em>.</li>
-    <li>You have a syntax error in your <code>icon-data.json</code> file, like a comma on the last line.</li>
-    <li>You forgot to include a certain app in your <code>icon-data.json</code> file and so the icon does not change when you execute the command.</li>
-    <li>An app is locked and, therefore, the icon cannot be changed. To unlock an app, go to the app, right click,  <code>Get Info</code>. Uncheck the <code>Locked</code> button.</li>
-</ul>
-<a href="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-01-54.png"><img class="aligncenter" src="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-01-54.png" alt="Locked App Error In Terminal" align="middle" /></a><a href="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-09-37.png"><img class="aligncenter" src="https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-09-37.png" alt="Locked App - Dropbox" align="middle" /></a>
-<h3>Have fun with your new icons! 😍</h3>
-<blockquote>Tips or tricks?
-<blockquote>contact me <a title="FVCproductions" href="http://twitter.com/fvcproductions" target="_blank">@fvcproductions</a></blockquote>
-</blockquote>
+Make sure to execute `killall Finder` as well so that your Finder restarts and shows the changes.
+
+Now go ahead and click the `ChangeIcons.command` to change all your icons simultaneously.
+
+[![ChangeIcons.command in Terminal](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-01-44.png)](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-01-44.png)
+
+You will be prompted to enter your password and **walla** you have all your snazzy new icons in place in seconds!
+
+### troubleshooting
+
+- You tried to edit the command files and now have a syntax error, like in the form of quotes - just make sure to use _straight quotes_.
+- You have a syntax error in your `icon-data.json` file, like a comma on the last line.
+- You forgot to include a certain app in your `icon-data.json` file and so the icon does not change when you execute the command.
+- An app is locked and, therefore, the icon cannot be changed. To unlock an app, go to the app, right click,  `Get Info`. Uncheck the `Locked` button.
+
+![Locked App Error In Terminal](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-01-54.png)
+
+![Locked App - Dropbox](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-09-37.png)
 
 ## contributing
 
-This is the `icon_data.json`. This contains all the necessary information the Unix executable file `setfileicon` will need to change your Mac App icons.
-
-You will never be able to see either of these files because they are hidden in a system folder called `.set_icons`.
-
-To be able to view and edit these files, you will have to run the following 2 commands in `Terminal` to temporarily reveal all hidden folders/files:
+This is the `icon_data.json`. This contains all the necessary information the Unix executable file `setfileicon` will need to change your Mac App icons. You will never be able to see either of these files because they are hidden in a system folder called `.set_icons`. To be able to view and edit these files, you will have to run the following 2 commands in `Terminal` to temporarily reveal all hidden folders/files:
 
 ```bash
 $ defaults write com.apple.finder AppleShowAllFiles YES
@@ -179,114 +158,8 @@ $ killall Finder
     "1Password 5.app": "1Password 5",
     "Alchemize.app": "Alchemize",
     "Alfred 2.app": "Alfred 2",
-    "Alternote.app": "Alternote",
-    "Amphetamine.app": "Amphetamine",
-    "AppCleaner.app": "AppCleaner",
-    "App Store.app": "App Store",
-    "Automator.app": "Automator",
-    //"Awareness.app":"Awareness",
-    "Bartender.app": "Bartender",
-    "BetterSnapTool.app": "BetterSnapTool",
-    "Blocs.app": "Blocs",
-    "Blogo.app": "Blogo",
-    "Blotter.app": "Blotter",
-    "Brackets.app": "Brackets",
-    "Byword.app": "Byword",
-    "Calculator.app": "Calculator",
-    "Calendar.app": "Calendar",
-    "Candlelight.app": "VOX",
-    "Cathode.app": "iTerm",
-    //"cDock.app":"cDock",
-    "Characters.app": "Characters",
-    "Chess.app": "Chess",
-    "Chrome App Launcher.app": "Chrome App Launcher",
-    "CleanMyMac 3.app": "CleanMyMac",
-    "Coda 2.app": "Coda",
-    "CodeKit.app": "CodeKit",
-    "CodeRunner.app": "CodeRunner",
-    "Contacts.app": "Contacts",
-    "CrashPlan.app": "CrashPlan",
-    "Dash.app": "Dash",
-    "Dashboard.app": "Dashboard",
-    "Day One.app": "Day One",
-    "Deckset.app": "Deckset",
-    "Dictionary.app": "Dictionary",
-    "Dropbox.app": "DropBox",
-    "DVD Player.app": "DVD Player",
-    "Easy Image Converter.app": "Easy Image Converter",
-    "Evernote.app": "Evernote",
-    "FaceTime.app": "FaceTime",
-    "Fantastical 2.app": "Fantastical",
-    "Flux.app": "Flux",
-    "Font Book.app": "FontBook",
-    "Game Center.app": "Game Center",
-    "GitBook.app": "GitBook",
-    "Google Chrome.app": "Google Chrome",
-    "Google Drive.app": "Google Drive",
-    "Google Photos Backup.app": "GooglePhotosBackup",
-    "Healthier.app": "Lep",
-    "Image2icon.app": "BambooDock",
-    "iBooks.app": "iBooks",
-    "iBooks Author.app": "iBooksAuthor",
-    "iConvert Icons.app": "iConvert Icons",
-    "Image Capture.app": "Image Capture",
-    "iMovie.app": "iMovie",
-    "iStudiez Pro.app": "iStudiez",
-    "iTerm.app": "iTerm",
-    // "iTunes.app":"iTunes",
-    "iTunes Producer.app": "Celtx",
-    "Keynote.app": "Keynote",
-    "LaunchPad.app": "LaunchPad",
-    "LiteIcon.app": "LiteIcon",
-    "MacUpdate Desktop.app": "MacUpdate",
-    "Mail.app": "Mail",
-    "Maps.app": "Maps",
-    "Marked.app": "Marked 2",
-    "Marked 2.app": "Marked 2",
-    "MenuTab for Trello.app": "Anki2",
-    "Messages.app": "Messages",
-    "Mint QuickView.app": "Mint",
-    "Mission Control.app": "MissionControl",
-    "Mobirise.app": "iOS Simulator",
-    "Mou.app": "Mou",
-    "MySQLWorkbench.app": "MySQLWorkbench",
-    "Notes.app": "Notes",
-    "Numbers.app": "Numbers",
-    "Pages.app": "Pages",
-    "Photo Booth.app": "Photo Booth",
-    "Preview.app": "Preview",
-    "PopcornTime.app": "PopcornTime",
-    "puush.app": "Puush",
-    "QuickTime Player.app": "QuickTime",
-    "Raindrop.app": "Raindrop",
-    "Reminders.app": "Reminders",
-    "RescueTime.app": "Origin",
-    "Safari.app": "Safari",
-    "ScreenFlow.app": "ScreenFlow",
-    "Screenhero.app": "Screenhero",
-    "Shazam.app": "Shazam",
-    "Sip.app": "Sip",
-    "Sketch.app": "Sketch",
-    "Skype.app": "Skype",
-    "Slack.app": "Slack",
-    "Sorty.app": "Sorty",
-    "SoundCloud Downloader.app": "SoundCloud",
-    "Stickies.app": "Stickies",
-    "Sublime Text.app": "Sublime Text",
-    "System Preferences.app": "System Preferences",
-    "TextEdit.app": "TextEdit",
-    "The Unarchiver.app": "The Unarchiver",
-    "Time Machine.app": "Time Machine",
-    "Tower.app": "Tower",
-    "Ulysses.app": "Ulysses",
-    "uTorrent.app": "uTorrent",
-    "VLC.app": "VLC",
-    "Xcode.app": "Xcode",
-    "Xpressive.app": "Xpressive",
-    "Yoink.app": "Yoink",
-    "YNAB 4.app": "YNAB"
+    // and so on
 }
-
 ```
 
 So if we wanted to add an icon for the **Ember** Mac App, then we would just add the following line right after the line that has **EasyImageConverter** (so that it stays in alphabetical order):
@@ -301,10 +174,9 @@ If Ember wasn't installed, then the script would just skip that line.
 
 **To submit a successful pull request**, you have to do the following:
 
--
-
 ## credits
 
-- icons
-    - <a title="deWith" href="http://dewith.com/" target="_blank">Sebastian de With</a>
-    - <a title="Yoios" href="https://github.com/mmarfil/yoios" target="_blank">Yoios</a>
+- <a title="deWith" href="http://dewith.com/" target="_blank">Sebastian de With
+- <a title="Yoios" href="https://github.com/mmarfil/yoios" target="_blank">Yoios
+
+A special thanks to [James Moore](https://twitter.com/foozmeat "James Moore"), who created the `ChangeIcons.command` to replace all the icons and Damien Bobillot who created the `setfileicon` UNIX Executable File.
