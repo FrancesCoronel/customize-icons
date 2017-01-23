@@ -1,6 +1,10 @@
 # customize-icons
 
-> customize your icons on El Capitan
+> customize your icons on macOS
+
+## TL;DR
+
+Use the `ChangeIcons.command` in this folder to change your macOS app icons in a jiffy.
 
 ## index
 
@@ -15,7 +19,7 @@
 
 ## intro
 
-OS X El Capitan introduced a new security policy preventing users from changing any system icon.
+El Capitan introduced a new security policy preventing users from changing any system icon.
 
 However, you can still continue to change your apps and volumes icons normally.
 
