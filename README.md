@@ -1,23 +1,8 @@
 # customize-icons
 
-> customize your icons on macOS
+[![Github Issues](http://githubbadges.herokuapp.com/fvcproductions/customize-icons/issues.svg?style=flat-square)](https://github.com/fvcproductions/customize-icons/issues) [![Pending Pull-Requests](http://githubbadges.herokuapp.com/fvcproductions/customize-icons/pulls.svg?style=flat-square)](https://github.com/fvcproductions/customize-icons/pulls) [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
-## TL;DR
-
-Use the `ChangeIcons.command` in this folder to change your macOS app icons in a jiffy.
-
-## index
-
-- [intro](#intro)
-- [tools](#tools)
-- [step-1](#step-1)
-- [step-2](#step-2)
-- [step-3](#step-3)
-- [troubleshooting](#troubleshooting)
-- [contributing](#contributing)
-- [credits](#credits)
-
-## intro
+## Use the `ChangeIcons.command` in this folder to customize and change your macOS app icons in a jiffy.
 
 El Capitan introduced a new security policy preventing users from changing any system icon.
 
@@ -27,20 +12,13 @@ Apps like `LiteIcon` still work pretty well for this sort of thing, but it requi
 
 If you're like me and enjoy using the `Terminal` to automate work-flows, I think you'll enjoy what's to follow.
 
-## tools
+## Installation
 
-- `Terminal` or an alternative like `iTerm 2`
-- this `GitHub` repo located at `[github.com/fvcproductions/customize-icons](https://github.com/fvcproductions/customize-icons)`
-
-## step 1
-
-### Getting some cool icons.
+### Step 1 - Download Icons
 
 [DeviantArt](http://www.deviantart.com) is my go-to place for icons sets, but you can also try [IconArchive](http://www.iconarchive.com/) for a broader range of options.
 
-## step 2
-
-### edit files
+## Step 2 - Edit Files
 
 I include this command file in the repo under `ChangeIcons.command`
 
@@ -102,9 +80,7 @@ So if you want to change your Utility icons as well, the `.set_icons` folder loc
 
 > The only difference between the `ChangeIcons.command` within the `All The Icons` folder and the `ChangeUtilityIcons.command located within the`Utilities folder`is that on Line 36, the app path is listed as`app_path = “/Applications/Utilities/#{key}”`.
 
-## step 3
-
-### edit command
+## Step 3 - Edit Command
 
 Now you probably have something like the following:
 
@@ -125,7 +101,7 @@ Now go ahead and click the `ChangeIcons.command` to change all your icons simult
 
 You will be prompted to enter your password and **walla** you have all your snazzy new icons in place in seconds!
 
-### troubleshooting
+### Troubleshooting
 
 - You tried to edit the command files and now have a syntax error, like in the form of quotes - just make sure to use _straight quotes_.
 - You have a syntax error in your `icon-data.json` file, like a comma on the last line.
@@ -136,7 +112,7 @@ You will be prompted to enter your password and **walla** you have all your snaz
 
 ![Locked App - Dropbox](https://fvcproductions.files.wordpress.com/2015/03/screenshot-2015-03-29-00-09-37.png)
 
-## contributing
+## Contributing
 
 This is the `icon_data.json`. This contains all the necessary information the Unix executable file `setfileicon` will need to change your Mac App icons. You will never be able to see either of these files because they are hidden in a system folder called `.set_icons`. To be able to view and edit these files, you will have to run the following 2 commands in `Terminal` to temporarily reveal all hidden folders/files:
 
@@ -178,9 +154,15 @@ If Ember wasn't installed, then the script would just skip that line.
 
 **To submit a successful pull request**, you have to do the following:
 
-## credits
+## Credits
 
-- <a title="deWith" href="http://dewith.com/" target="_blank">Sebastian de With
-- <a title="Yoios" href="https://github.com/mmarfil/yoios" target="_blank">Yoios
+- [Sebastian de With](http://dewith.com/)
+- [Yoios](https://github.com/mmarfil/yoios)
+- [James Moore](https://twitter.com/foozmeat)
+- [FVCproductions](http://fvcproductions.com)
 
-A special thanks to [James Moore](https://twitter.com/foozmeat "James Moore"), who created the `ChangeIcons.command` to replace all the icons and Damien Bobillot who created the `setfileicon` UNIX Executable File.
+## Donations
+
+> Feed me... 🍕
+
+[![Donate via PayPal](https://raw.github.com/xioTechnologies/PayPal-Button/master/PayPal%20Button.png)](http://paypal.me/fvcproductions)
